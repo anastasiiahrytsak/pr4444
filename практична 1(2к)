@@ -1,0 +1,220 @@
+function generateRandomArray(size, min, max) {
+    let arr = [];
+    for (let i = 0; i < size; i++) {
+        let num = Math.floor(Math.random() * (max - min + 1)) + min;
+        arr.push(num);
+    }
+    return arr;
+}
+
+
+let myArray = generateRandomArray(10, -10, 10);
+console.log("Початковий масив:", myArray);
+
+
+function task1(arr, startIndex, endIndex) {
+    let count = 0;
+    let sum = 0;
+
+    for (let i = startIndex; i <= endIndex; i++) {
+      
+        if (i < arr.length && arr[i] % 2 === 0) {
+            count++;
+            sum += arr[i];
+        }
+    }
+    console.log(`1. У діапазоні від ${startIndex} до ${endIndex}: кількість парних = ${count}, сума = ${sum}`);
+}
+task1(myArray, 2, 7);
+
+
+function task2(arr) {
+    let sum = 0;
+    for (let i = 0; i < arr.length; i++) {
+        sum += arr[i];
+    }
+    let avg = sum / arr.length;
+
+    let count = 0;
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i] > avg) {
+            count++;
+        }
+    }
+    console.log(`2. Середнє арифметичне = ${avg.toFixed(2)}, більших за нього = ${count}`);
+}
+task2(myArray);
+
+
+function task3(arr1, arr2) {
+    let result = [];
+    for (let i = 0; i < arr1.length; i++) {
+        result.push(arr1[i] + arr2[i]);
+    }
+    console.log("3. Попарна сума масивів:", result);
+}
+task3([1, 2, 3, 4], [10, 20, 30, 40]);
+
+
+function task4(arr1, arr2) {
+    let result = [];
+  
+    for (let i = 0; i < arr1.length; i++) {
+        result.push(arr1[i]);
+    }
+
+    for (let i = 0; i < arr2.length; i++) {
+        result.push(arr2[i]);
+    }
+    console.log("4. Конкатенація двох масивів:", result);
+}
+task4([1, 2, 3], [4, 5, 6, 7, 8]);
+
+
+function task5(arr) {
+  
+    let copy = arr.slice();
+    
+    let maxIndex = 0;
+    let minIndex = 0;
+
+    for (let i = 1; i < copy.length; i++) {
+        if (copy[i] > copy[maxIndex]) {
+            maxIndex = i;
+        }
+        if (copy[i] < copy[minIndex]) {
+            minIndex = i;
+        }
+    }
+
+   
+    let temp = copy[maxIndex];
+    copy[maxIndex] = copy[minIndex];
+    copy[minIndex] = temp;
+
+    console.log("5. Масив після обміну Max та Min:", copy);
+}
+task5(myArray);
+
+
+function task6(arr) {
+    let positiveArr = [];
+    let negativeArr = [];
+
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i] > 0) {
+            positiveArr.push(arr[i]);
+        } else if (arr[i] < 0) {
+            negativeArr.push(arr[i]);
+        }
+    }
+    console.log("6. Додатні елементи:", positiveArr);
+    console.log("   Від'ємні елементи:", negativeArr);
+}
+task6(myArray);
+
+function task7(arr) {
+  
+    let max = arr[0];
+    let min = arr[0];
+    for (let i = 1; i < arr.length; i++) {
+        if (arr[i] > max) max = arr[i];
+        if (arr[i] < min) min = arr[i];
+    }
+
+    let result = [];
+    let foundMax = false;
+    let foundMin = false;
+
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i] === max) {
+            if (!foundMax) {
+                result.push(arr[i]);
+                foundMax = true; 
+            }
+        } else if (arr[i] === min) {
+            if (!foundMin) {
+                result.push(arr[i]);
+                foundMin = true; 
+            }
+        } else {
+            result.push(arr[i]);
+        }
+    }
+    console.log("7. Масив без дублікатів Max/Min:", result);
+}
+task7([5, 1, 5, 3, 1, 2, 5, 1]);
+
+
+function task8(arr1, arr2) {
+    let sum1 = 0;
+    for (let i = 0; i < arr1.length; i++) sum1 += arr1[i];
+    let avg1 = sum1 / arr1.length;
+
+
+    let sum2 = 0;
+    for (let i = 0; i < arr2.length; i++) sum2 += arr2[i];
+    let avg2 = sum2 / arr2.length;
+
+
+    let minAvg = Math.min(avg1, avg2);
+    let maxAvg = Math.max(avg1, avg2);
+
+    let result = [];
+    
+ 
+    let allElements = arr1.concat(arr2);
+
+    for (let i = 0; i < allElements.length; i++) {
+        if (allElements[i] >= minAvg && allElements[i] <= maxAvg) {
+            result.push(allElements[i]);
+        }
+    }
+
+    console.log(`8. Елементи між середніми (${avg1.toFixed(2)} і ${avg2.toFixed(2)}):`, result);
+}
+task8([1, 2, 3], [10, 20, 30]);
+
+
+
+
+
+Відповіді на контрольні питання
+Якими способами можна визначити чи ціле число є парним?
+
+За допомогою оператора остачі від ділення %: if (n % 2 === 0).
+
+За допомогою побітового оператора &: if ((n & 1) === 0) (у парних чисел останній біт завжди 0).
+
+
+
+Як можна реалізувати повернення більше ніж одного результату з метода (див. завдання 2)?
+
+Повернути об'єкт з декількома властивостями, наприклад: return { avg: 5, count: 3 };.
+
+Повернути масив, де записано кілька значень, наприклад: return [avg, count];.
+
+
+
+Що відбудеться, якщо в завданні 3 вхідні масиви будуть різної довжини?
+
+Якщо один масив коротший за інший, то при спробі звернутися до відсутнього елемента коротшого масиву в JS ми отримаємо undefined.
+
+При додаванні числа до undefined результат буде NaN (Not a Number — не число).
+
+
+
+Що відбудеться, якщо в завданні 4 один із масивів буде порожній? А якщо будуть порожні обидва масиви?
+
+Якщо один порожній: цикл для порожнього масиву просто не виконається жодного разу, і ми отримаємо копію другого (непорожнього) масиву.
+
+Якщо обидва порожні: обидва цикли не виконаються, і функція поверне новий порожній масив []. Помилки не виникне.
+
+
+
+Як поведе себе програма (завдання 5) якщо в масиві буде не однакова кількість максимальних і мінімальних елементів? (наприклад масив [1, 1, 1, 5, 5])
+
+Якщо ми використовуємо строге порівняння > і <, то знайдеться найперший мінімум (індекс 0) та найперший максимум (індекс 3).
+
+Вони поміняються місцями, а решта однакових одиниць та п'ятірок залишаться на своїх місцях. Результат буде: [5, 1, 1, 1, 5].
+
