@@ -1,0 +1,287 @@
+function generateMatrix(m, n, minVal, maxVal) {
+    let matrix = [];
+    for (let i = 0; i < m; i++) {
+        let row = [];
+        for (let j = 0; j < n; j++) {
+          
+            let num = Math.floor(Math.random() * (maxVal - minVal + 1)) + minVal;
+            row.push(num);
+        }
+        matrix.push(row);
+    }
+    return matrix;
+}
+
+function printMatrix(matrix) {
+    if (!matrix || matrix.length === 0 || matrix[0].length === 0) {
+        console.log("Матриця порожня");
+        return;
+    }
+
+    let rows = matrix.length;
+    let cols = matrix[0].length;
+
+    let header = "\t\t";
+    for (let j = 0; j < cols; j++) {
+        header += `стовпець ${j + 1}\t`;
+    }
+    console.log(header);
+
+    for (let i = 0; i < rows; i++) {
+        let line = `рядок ${i + 1}\t`;
+        for (let j = 0; j < cols; j++) {
+            let elem = matrix[i][j];
+          
+            if (typeof elem === 'number' && !Number.isInteger(elem)) {
+                elem = elem.toFixed(2);
+            }
+            line += `${elem}\t\t`;
+        }
+        console.log(line);
+    }
+}
+
+
+
+function task1(matrix) {
+    let result = [];
+
+    for (let i = 0; i < matrix.length; i++) {
+        let sum = 0;
+        for (let j = 0; j < matrix[i].length; j++) {
+            sum += matrix[i][j];
+        }
+        
+        let avg = sum / matrix[i].length;
+        let newRow = [];
+        
+        for (let j = 0; j < matrix[i].length; j++) {
+            newRow.push(matrix[i][j] - avg);
+        }
+        result.push(newRow);
+    }
+
+    return result;
+}
+
+
+function task2(matrix, k) {
+    let rows = matrix.length;
+    let cols = matrix[0].length;
+    
+    let shifted = [];
+    for (let i = 0; i < rows; i++) {
+        shifted.push(new Array(cols));
+    }
+
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+
+            let newI = (i - (k % rows) + rows) % rows;
+            let newJ = (j + k) % cols;
+
+            shifted[newI][newJ] = matrix[i][j];
+        }
+    }
+
+    return shifted;
+}
+
+function task3(matrix) {
+    let rows = matrix.length;
+    let cols = matrix[0].length;
+
+    let maxVal = matrix[0][0];
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            if (matrix[i][j] > maxVal) {
+                maxVal = matrix[i][j];
+            }
+        }
+    }
+
+    let badRows = [];
+    let badCols = [];
+
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            if (matrix[i][j] === maxVal) {
+                if (!badRows.includes(i)) badRows.push(i);
+                if (!badCols.includes(j)) badCols.push(j);
+            }
+        }
+    }
+
+    let filteredMatrix = [];
+    for (let i = 0; i < rows; i++) {
+        if (badRows.includes(i)) continue;
+
+        let newRow = [];
+        for (let j = 0; j < cols; j++) {
+            if (badCols.includes(j)) continue;
+            newRow.push(matrix[i][j]);
+        }
+        filteredMatrix.push(newRow);
+    }
+
+    return filteredMatrix;
+}
+
+function task4(matrix) {
+    let n = matrix.length;
+
+    for (let i = 0; i < n; i++) {
+        for (let j = i + 1; j < n; j++) {
+            let temp = matrix[i][j];
+            matrix[i][j] = matrix[j][i];
+            matrix[j][i] = temp;
+        }
+    }
+
+    for (let i = 0; i < n; i++) {
+        matrix[i].reverse();
+    }
+}
+
+
+
+const EMPTY_WINDOW = "Вільне вікно";
+const DAYS = ["Понеділок", "Вівторок", "Середа", "Четвер", "П'ятниця"];
+
+function createSchedule() {
+    let schedule = [];
+    for (let g = 0; g < 3; g++) {
+        let groupSchedule = [];
+        for (let d = 0; d < 5; d++) {
+            let daySchedule = [];
+            for (let p = 0; p < 4; p++) {
+                daySchedule.push(EMPTY_WINDOW);
+            }
+            groupSchedule.push(daySchedule);
+        }
+        schedule.push(groupSchedule);
+    }
+    return schedule;
+}
+
+function findMaxLoadDay(schedule, groupIdx) {
+    let maxPairs = -1;
+    let bestDayIdx = 0;
+
+    for (let d = 0; d < 5; d++) {
+        let count = 0;
+        for (let p = 0; p < 4; p++) {
+            if (schedule[groupIdx][d][p] !== EMPTY_WINDOW) {
+                count++;
+            }
+        }
+        if (count > maxPairs) {
+            maxPairs = count;
+            bestDayIdx = d;
+        }
+    }
+
+    console.log(`\nДень з найбільшим навантаженням для Групи ${groupIdx + 1}: ${DAYS[bestDayIdx]} (${maxPairs} пар(и))`);
+}
+
+function findWindowDays(schedule) {
+    console.log("\n--- Перевірка днів із «вікнами» ---");
+    
+    for (let g = 0; g < 3; g++) {
+        for (let d = 0; d < 5; d++) {
+            let first = -1;
+            let last = -1;
+
+            for (let p = 0; p < 4; p++) {
+                if (schedule[g][d][p] !== EMPTY_WINDOW) {
+                    if (first === -1) first = p;
+                    last = p;
+                }
+            }
+
+            if (first !== -1 && last !== -1) {
+                for (let p = first + 1; p < last; p++) {
+                    if (schedule[g][d][p] === EMPTY_WINDOW) {
+                        console.log(`Група ${g + 1}, ${DAYS[d]}: є «вікно» на ${p + 1}-й парі.`);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
+
+function checkStreamClasses(schedule) {
+    console.log("\n--- Потокові заняття ---");
+    let countStream = 0;
+
+    for (let d = 0; d < 5; d++) {
+        for (let p = 0; p < 4; p++) {
+            for (let g1 = 0; g1 < 3; g1++) {
+                for (let g2 = g1 + 1; g2 < 3; g2++) {
+                    let subject1 = schedule[g1][d][p];
+                    let subject2 = schedule[g2][d][p];
+
+                    if (subject1 !== EMPTY_WINDOW && subject1 === subject2) {
+                        console.log(`Предмет «${subject1}»: ${DAYS[d]}, ${p + 1}-та пара у Групи ${g1 + 1} та Групи ${g2 + 1}`);
+                        countStream++;
+                    }
+                }
+            }
+        }
+    }
+
+    if (countStream === 0) {
+        console.log("Потокових занять не знайдено.");
+    }
+}
+
+
+console.log("=== ГОЛОВНЕ ЗАВДАННЯ ===");
+
+let m = 4, n = 5;
+let myMatrix = generateMatrix(m, n, -10, 20);
+
+console.log("\n1. Початкова матриця:");
+printMatrix(myMatrix);
+
+console.log("\n2. Після віднімання середнього арифметичного рядка:");
+let matrixMinusMean = task1(myMatrix);
+printMatrix(matrixMinusMean);
+
+let k = 2;
+console.log(`\n3. Після циклічного зсуву на k=${k} вправо та догори:`);
+let shifted = task2(myMatrix, k);
+printMatrix(shifted);
+
+console.log("\n4. Після видалення рядків та стовпців з макс. елементом:");
+let reduced = task3(myMatrix);
+printMatrix(reduced);
+
+console.log("\n5. Обертання квадратної матриці 4x4 на 90° за годинниковою стрілкою (in-place):");
+let squareMat = generateMatrix(4, 4, 1, 9);
+console.log("До обертання:");
+printMatrix(squareMat);
+
+task4(squareMat);
+console.log("Після обертання:");
+printMatrix(squareMat);
+
+
+console.log("\n\n=== ДОДАТКОВЕ ЗАВДАННЯ ===");
+
+let schedule = createSchedule();
+
+schedule[0][0][0] = "Математика"; // Група 1, Пн, 1 пара
+schedule[0][0][1] = EMPTY_WINDOW; // Вікно
+schedule[0][0][2] = "Фізика";     // Група 1, Пн, 3 пара
+
+schedule[0][1][0] = "ООП";
+schedule[0][1][1] = "ООП";
+schedule[0][1][2] = "Бази даних";
+
+schedule[1][0][0] = "Математика"; 
+
+findMaxLoadDay(schedule, 0); 
+findWindowDays(schedule);
+checkStreamClasses(schedule);
