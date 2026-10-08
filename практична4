@@ -1,0 +1,59 @@
+function print1ToN(n) {
+    if (n < 1) return;
+    print1ToN(n - 1);
+    console.log(n);
+}
+
+function printAToB(a, b) {
+    console.log(a);
+    if (a === b) return;
+    
+    if (a < b) {
+        printAToB(a + 1, b);
+    } else {
+        printAToB(a - 1, b);
+    }
+}
+
+function isPowerOfTwo(n) {
+    if (n === 1) return "YES";
+    if (n < 1 || n % 2 !== 0) return "NO";
+    return isPowerOfTwo(n / 2);
+}
+
+function sumOfDigits(n) {
+    if (n === 0) return 0;
+    return (n % 10) + sumOfDigits(Math.floor(n / 10));
+}
+
+function printDigitsRightToLeft(n) {
+    if (n === 0) return;
+    console.log(n % 10);
+    printDigitsRightToLeft(Math.floor(n / 10));
+}
+
+function printDigitsLeftToRight(n) {
+    if (n === 0) return;
+    printDigitsLeftToRight(Math.floor(n / 10));
+    console.log(n % 10);
+}
+
+
+console.log("=== 1. Від 1 до n (n = 5) ===");
+print1ToN(5);
+
+console.log("\n=== 2. Від A до B (A = 5, B = 1) ===");
+printAToB(5, 1);
+
+console.log("\n=== 3. Точна степінь двійки ===");
+console.log("8 ->", isPowerOfTwo(8));
+console.log("3 ->", isPowerOfTwo(3));
+
+console.log("\n=== 4. Сума цифр числа (179) ===");
+console.log("Сума:", sumOfDigits(179));
+
+console.log("\n=== 5. Цифри числа справа наліво (179) ===");
+printDigitsRightToLeft(179);
+
+console.log("\n=== 6. Цифри числа зліва направо (179) ===");
+printDigitsLeftToRight(179);
