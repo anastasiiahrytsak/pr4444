@@ -1,0 +1,112 @@
+function generateArray(length, minVal, maxVal) {
+    let arr = [];
+    for (let i = 0; i < length; i++) {
+        let randomNum = Math.floor(Math.random() * (maxVal - minVal + 1)) + minVal;
+        arr.push(randomNum);
+    }
+    return arr;
+}
+
+function printArray(arr) {
+    let formattedElements = [];
+    for (let i = 0; i < arr.length; i++) {
+        formattedElements.push(`[cell - ${i},value - ${arr[i]}]`);
+    }
+    console.log(`"{${formattedElements.join(',')}}"`);
+}
+
+
+function bubbleSort(array, isAscending = true) {
+    let arr = [...array]; 
+    let n = arr.length;
+
+    for (let i = 0; i < n - 1; i++) {
+        for (let j = 0; j < n - 1 - i; j++) {
+            let shouldSwap = isAscending ? arr[j] > arr[j + 1] : arr[j] < arr[j + 1];
+            
+            if (shouldSwap) {
+                let temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+    return arr;
+}
+
+function insertionSort(array, isAscending = true) {
+    let arr = [...array];
+    let n = arr.length;
+
+    for (let i = 1; i < n; i++) {
+        let key = arr[i];
+        let j = i - 1;
+
+        while (j >= 0 && (isAscending ? arr[j] > key : arr[j] < key)) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+    return arr;
+}
+
+function selectionSort(array, isAscending = true) {
+    let arr = [...array];
+    let n = arr.length;
+
+    for (let i = 0; i < n - 1; i++) {
+        let targetIndex = i;
+
+        for (let j = i + 1; j < n; j++) {
+            let isTarget = isAscending ? arr[j] < arr[targetIndex] : arr[j] > arr[targetIndex];
+            if (isTarget) {
+                targetIndex = j;
+            }
+        }
+
+        if (targetIndex !== i) {
+            let temp = arr[i];
+            arr[i] = arr[targetIndex];
+            arr[targetIndex] = temp;
+        }
+    }
+    return arr;
+}
+
+
+
+console.log("=== Генерація початкового масиву ===");
+let initialArray = generateArray(8, 1, 20);
+console.log("Початковий масив:");
+printArray(initialArray);
+
+
+console.log("\n=== 1. BUBBLE SORT ===");
+let bubbleAsc = bubbleSort(initialArray, true);
+console.log("За зростанням (true):");
+printArray(bubbleAsc);
+
+let bubbleDesc = bubbleSort(initialArray, false);
+console.log("За спаданням (false):");
+printArray(bubbleDesc);
+
+
+console.log("\n=== 2. INSERTION SORT ===");
+let insertionAsc = insertionSort(initialArray, true);
+console.log("За зростанням (true):");
+printArray(insertionAsc);
+
+let insertionDesc = insertionSort(initialArray, false);
+console.log("За спаданням (false):");
+printArray(insertionDesc);
+
+
+console.log("\n=== 3. SELECTION SORT ===");
+let selectionAsc = selectionSort(initialArray, true);
+console.log("За зростанням (true):");
+printArray(selectionAsc);
+
+let selectionDesc = selectionSort(initialArray, false);
+console.log("За спаданням (false):");
+printArray(selectionDesc);
