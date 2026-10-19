@@ -1,0 +1,86 @@
+function partition(arr, low, high, isAscending) {
+    let pivot = arr[high];
+    let i = low - 1;
+
+    for (let j = low; j < high; j++) {
+        let shouldSwap = isAscending ? (arr[j] <= pivot) : (arr[j] >= pivot);
+        
+        if (shouldSwap) {
+            i++;
+          let temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+        }
+    }
+
+    let temp = arr[i + 1];
+    arr[i + 1] = arr[high];
+    arr[high] = temp;
+
+    return i + 1;
+}
+
+function quickSortRecursive(arr, low, high, isAscending) {
+    if (low < high) {
+        let pivotIndex = partition(arr, low, high, isAscending);
+
+        quickSortRecursive(arr, low, pivotIndex - 1, isAscending);
+        quickSortRecursive(arr, pivotIndex + 1, high, isAscending);
+    }
+}
+
+function quickSort(arr, isAscending = true) {
+    let arrayCopy = [...arr];
+    quickSortRecursive(arrayCopy, 0, arrayCopy.length - 1, isAscending);
+    return arrayCopy;
+}
+
+function isSorted(arr, isAscending = true) {
+    for (let i = 0; i < arr.length - 1; i++) {
+        if (isAscending) {
+            if (arr[i] > arr[i + 1]) return false;
+        } else {
+            if (arr[i] < arr[i + 1]) return false;
+        }
+    }
+    return true;
+}
+
+function generateRandomArray(size) {
+    let arr = [];
+    for (let i = 0; i < size; i++) {
+        arr.push(Math.random() * 2000 - 1000); 
+    }
+    return arr;
+}
+
+
+function runTests() {
+    const sizes = [1000, 10000, 100000];
+
+    console.log("=== ТЕСТУВАННЯ АЛГОРИТМУ QUICKSORT ===");
+
+    sizes.forEach(size => {
+        let testArray = generateRandomArray(size);
+
+        let startTime = performance.now();
+        let sortedAsc = quickSort(testArray, true);
+        let endTime = performance.now();
+        let timeAsc = (endTime - startTime).toFixed(2);
+
+        let checkAsc = isSorted(sortedAsc, true);
+
+        startTime = performance.now();
+        let sortedDesc = quickSort(testArray, false);
+        endTime = performance.now();
+        let timeDesc = (endTime - startTime).toFixed(2);
+
+        let checkDesc = isSorted(sortedDesc, false);
+
+        console.log(`\nРозмір масиву: ${size} елементів`);
+        console.log(`- Зростання: час = ${timeAsc} ms | Відсортовано вірно: ${checkAsc}`);
+        console.log(`- Спадання:  час = ${timeDesc} ms | Відсортовано вірно: ${checkDesc}`);
+    });
+}
+
+runTests();
