@@ -1,0 +1,147 @@
+  class Node {
+    constructor(value) {
+        this.value = value;
+        this.left = null;  
+        this.right = null; 
+    }
+}
+
+class BinaryTree {
+    constructor() {
+        this.root = null; 
+        this.size = 0;   
+    }
+
+    insert(value) {
+        const newNode = new Node(value);
+
+        if (this.root === null) {
+            this.root = newNode;
+            this.size++;
+            return;
+        }
+
+        let current = this.root;
+        while (true) {
+            if (value < current.value) {
+                if (current.left === null) {
+                    current.left = newNode;
+                    this.size++;
+                    break;
+                }
+                current = current.left;
+            } else {
+                if (current.right === null) {
+                    current.right = newNode;
+                    this.size++;
+                    break;
+                }
+                current = current.right;
+            }
+        }
+    }
+
+    contains(value) {
+        let current = this.root;
+        while (current !== null) {
+            if (value === current.value) {
+                return true;
+            }
+            if (value < current.value) {
+                current = current.left;
+            } else {
+                current = current.right;
+            }
+        }
+        return false;
+    }
+
+    findMin(node = this.root) {
+        if (node === null) return null;
+        let current = node;
+        while (current.left !== null) {
+            current = current.left;
+        }
+        return current.value;
+    }
+
+    findMax(node = this.root) {
+        if (node === null) return null;
+        let current = node;
+        while (current.right !== null) {
+            current = current.right;
+        }
+        return current.value;
+    }
+
+    inOrderPrint(node = this.root, result = []) {
+        if (node !== null) {
+            this.inOrderPrint(node.left, result);
+            result.push(node.value);
+            this.inOrderPrint(node.right, result);
+        }
+        return result;
+    }
+
+    getCount() {
+        return this.size;
+    }
+
+    remove(value) {
+        let wasRemoved = false;
+
+        const removeNode = (node, val) => {
+            if (node === null) return null;
+
+            if (val < node.value) {
+                node.left = removeNode(node.left, val);
+                return node;
+            } else if (val > node.value) {
+                node.right = removeNode(node.right, val);
+                return node;
+            } else {
+                wasRemoved = true;
+
+                if (node.left === null && node.right === null) {
+                    return null;
+                }
+
+                if (node.left === null) return node.right;
+                if (node.right === null) return node.left;
+
+                let minRightValue = this.findMin(node.right);
+                node.value = minRightValue;
+                node.right = removeNode(node.right, minRightValue);
+                return node;
+            }
+        };
+
+        this.root = removeNode(this.root, value);
+        if (wasRemoved) {
+            this.size--;
+        }
+    }
+}
+
+
+let tree = new BinaryTree();
+
+const elements = [5, 3, 9, 1, 7, 10, 6, 8];
+elements.forEach(val => tree.insert(val));
+
+console.log("=== ТЕСТУВАННЯ БІНАРНОГО ДЕРЕВА ===");
+
+console.log("Усі елементи (відсортовані):", tree.inOrderPrint().join(", "));
+
+console.log("Загальна кількість елементів:", tree.getCount()); 
+console.log("Найменший елемент:", tree.findMin()); 
+console.log("Найбільший елемент:", tree.findMax()); 
+console.log("Чи є елемент 7?:", tree.contains(7)); 
+console.log("Чи є елемент 15?:", tree.contains(15)); 
+
+console.log("\n--- Видаляємо елемент 7 ---");
+tree.remove(7);
+
+console.log("Усі елементи після видалення 7:", tree.inOrderPrint().join(", "));
+console.log("Нова кількість елементів:", tree.getCount());
+console.log("Чи є елемент 7 після видалення?:", tree.contains(7)); 
