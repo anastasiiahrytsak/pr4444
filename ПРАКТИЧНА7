@@ -1,0 +1,138 @@
+   class ArrayQueue {
+    constructor() {
+        this.items = [];
+        this.head = 0;
+        this.tail = 0; 
+    }
+
+    enqueue(element) {
+        this.items[this.tail] = element;
+        this.tail++;
+    }
+
+    dequeue() {
+        if (this.isEmpty()) {
+            console.log("Черга порожня!");
+            return null;
+        }
+
+        let item = this.items[this.head];
+        delete this.items[this.head];
+        this.head++; 
+
+        return item;
+    }
+
+    size() {
+        return this.tail - this.head;
+    }
+
+    isEmpty() {
+        return this.size() === 0;
+    }
+
+    print() {
+        let currentElements = [];
+        for (let i = this.head; i < this.tail; i++) {
+            currentElements.push(this.items[i]);
+        }
+        console.log("ArrayQueue (FIFO):", currentElements.join(" <- "));
+    }
+}
+
+
+class Node {
+    constructor(data) {
+        this.data = data;    
+        this.next = null;    
+    }
+}
+
+class LinkedQueue {
+    constructor() {
+        this.head = null; 
+        this.tail = null; 
+        this.length = 0;  
+    }
+
+    enqueue(data) {
+        let newNode = new Node(data);
+
+        if (this.isEmpty()) {
+            this.head = newNode;
+            this.tail = newNode;
+        } else {
+            this.tail.next = newNode;
+            this.tail = newNode;
+        }
+
+        this.length++;
+    }
+
+    dequeue() {
+        if (this.isEmpty()) {
+            console.log("Черга порожня!");
+            return null;
+        }
+
+        let removedData = this.head.data;
+        this.head = this.head.next;
+        this.length--;
+
+        if (this.head === null) {
+            this.tail = null;
+        }
+
+        return removedData;
+    }
+
+    size() {
+        return this.length;
+    }
+
+    isEmpty() {
+        return this.head === null;
+    }
+
+    print() {
+        let current = this.head;
+        let result = [];
+        while (current !== null) {
+            result.push(current.data);
+            current = current.next;
+        }
+        console.log("LinkedQueue (FIFO):", result.join(" <- "));
+    }
+}
+
+
+console.log("=== ТЕСТ 1: Черга на масиві ===");
+let arrayQ = new ArrayQueue();
+
+arrayQ.enqueue(6);
+arrayQ.enqueue(4);
+arrayQ.enqueue(6);
+arrayQ.enqueue(2);
+arrayQ.enqueue(7);
+
+arrayQ.print(); // 6 <- 4 <- 6 <- 2 <- 7
+console.log("Кількість елементів:", arrayQ.size());
+
+console.log("Видалено з черги (dequeue):", arrayQ.dequeue());
+arrayQ.print(); // 4 <- 6 <- 2 <- 7
+console.log("Нова кількість елементів:", arrayQ.size()); 
+
+
+console.log("\n=== ТЕСТ 2: Черга на вузлах (Nodes) ===");
+let linkedQ = new LinkedQueue();
+
+linkedQ.enqueue(12);
+linkedQ.enqueue(25);
+linkedQ.enqueue(8);
+
+linkedQ.print();
+console.log("Кількість елементів:", linkedQ.size()); 
+
+console.log("Видалено з черги (dequeue):", linkedQ.dequeue());
+linkedQ.print();
+console.log("Чи порожня черга?:", linkedQ.isEmpty()); 
