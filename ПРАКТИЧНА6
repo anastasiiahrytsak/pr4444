@@ -1,0 +1,126 @@
+   class ArrayStack {
+    constructor() {
+        this.items = []; 
+    }
+
+    push(element) {
+        this.items.push(element);
+    }
+
+    pop() {
+        if (this.isEmpty()) {
+            console.log("Стек порожній!");
+            return null;
+        }
+        return this.items.pop();
+    }
+
+    peek() {
+        if (this.isEmpty()) {
+            return null;
+        }
+        return this.items[this.items.length - 1];
+    }
+
+    isEmpty() {
+        return this.items.length === 0;
+    }
+
+    size() {
+        return this.items.length;
+    }
+
+    clear() {
+        this.items = [];
+    }
+
+    print() {
+        console.log("ArrayStack (зверху донизу):", [...this.items].reverse().join(" -> "));
+    }
+}
+
+
+class Node {
+    constructor(value) {
+        this.value = value;
+        this.next = null; 
+    }
+}
+
+class LinkedStack {
+    constructor() {
+        this.top = null;   
+        this.count = 0;   
+    }
+
+    push(element) {
+        let newNode = new Node(element);
+        newNode.next = this.top;  
+        this.top = newNode;    
+        this.count++;
+    }
+
+    pop() {
+        if (this.isEmpty()) {
+            console.log("Стек порожній!");
+            return null;
+        }
+        let poppedValue = this.top.value;
+        this.top = this.top.next;
+        this.count--;
+        return poppedValue;
+    }
+
+    peek() {
+        if (this.isEmpty()) {
+            return null;
+        }
+        return this.top.value;
+    }
+
+    isEmpty() {
+        return this.top === null;
+    }
+
+    size() {
+        return this.count;
+    }
+
+    print() {
+        let current = this.top;
+        let result = [];
+        while (current !== null) {
+            result.push(current.value);
+            current = current.next;
+        }
+        console.log("LinkedStack (зверху донизу):", result.join(" -> "));
+    }
+}
+
+
+console.log("=== ТЕСТ 1: Стек на масиві ===");
+let arrayStack = new ArrayStack();
+
+arrayStack.push(10);
+arrayStack.push(22);
+arrayStack.push(33);
+
+arrayStack.print();
+console.log("Верхній елемент (peek):", arrayStack.peek());
+console.log("Вилучений елемент (pop):", arrayStack.pop()); 
+arrayStack.print(); // 22 -> 10
+console.log("Розмір стека:", arrayStack.size());
+
+
+console.log("\n=== ТЕСТ 2: Стек на вузлах (зв'язаному списку) ===");
+let linkedStack = new LinkedStack();
+
+linkedStack.push(11);
+linkedStack.push(22);
+linkedStack.push(33);
+
+linkedStack.print(); // 33 -> 22 -> 11
+console.log("Верхній елемент (peek):", linkedStack.peek()); 
+console.log("Вилучений елемент (pop):", linkedStack.pop()); 
+linkedStack.print(); // 22 -> 11
+console.log("Чи порожній стек?:", linkedStack.isEmpty());   
